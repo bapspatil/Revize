@@ -29,22 +29,37 @@ class CategoryRoute extends StatelessWidget {
   ];
 
   Widget _buildCategoryWidgets(List<Widget> categories) {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) => categories[index],
-      itemCount: categories.length,
-    );
+    return OrientationBuilder(builder: (context, orientation) {
+      if (orientation == Orientation.portrait) {
+        return ListView.builder(
+          itemBuilder: (context, index) => categories[index],
+          itemCount: categories.length,
+        );
+      } else {
+        return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 4.0,
+          ),
+          itemBuilder: (context, index) => categories[index],
+          itemCount: categories.length,
+        );
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    var categoriesList = <Category>[];
+    var categoriesList = <Widget>[];
 
     for (var i = 0; i < _categoryNames.length; i++) {
       categoriesList.add(
-        Category(
-          name: _categoryNames[i],
-          color: _baseColors[i],
-          iconLocation: Icons.cake,
+        Center(
+          child: Category(
+            name: _categoryNames[i],
+            color: _baseColors[i],
+            iconLocation: Icons.cake,
+          ),
         ),
       );
     }
